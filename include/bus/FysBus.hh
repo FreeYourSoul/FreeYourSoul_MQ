@@ -37,6 +37,25 @@ namespace fys {
                 }
             }
 
+            void pushInBus(QueueContainer<T> message) {
+                int routingKey = message.getRoutingKey();
+
+                for (u_int i = 0; i < _queueRoutes.size(); ++i) {
+                    if (routingKey >= _queueRoutes.at(i).first.first && routingKey <= _queueRoutes.at(i).first.second) {
+                        _queues.at(_queueRoutes.at(i).second).push(message);
+                        return;
+                    }
+                }
+            }
+
+            const QueueContainer<T> &popFromBus(const int routingKey) {
+                for (u_int i = 0; i < _queueRoutes.size(); ++i) {
+                    if (routingKey >= _queueRoutes.at(i).first.first && routingKey <= _queueRoutes.at(i).first.second)
+                        return _queues.at(_queueRoutes.at(i).second).pop();
+                }
+                return NULL;
+            }
+
         private:
             void initializeBusFromIni(const std::string &iniPath) {
                 boost::property_tree::ptree pt;
@@ -66,10 +85,10 @@ namespace fys {
             void validateBusConfiguration(const int queueNumbers) {
                 BOOST_ASSERT(queueNumbers == _queueRoutes.size());
                 BOOST_ASSERT(queueNumbers == _queues.size());
-                for (int i = 0; i < _queueRoutes.size(); ++i) {
+                for (u_int i = 0; i < _queueRoutes.size(); ++i) {
                     std::pair<int, int> minMaxToCompare = _queueRoutes.at(i).first;
                     BOOST_ASSERT(minMaxToCompare.first < minMaxToCompare.second);
-                    for (int j = (i + 1); j < _queueRoutes.size(); ++j) {
+                    for (u_int j = (i + 1); j < _queueRoutes.size(); ++j) {
                         std::pair<int, int> minMax = _queueRoutes.at(j).first;
                         BOOST_ASSERT((minMaxToCompare.first < minMax.first) &&
                                      (minMaxToCompare.second < minMax.second) &&
@@ -84,7 +103,7 @@ namespace fys {
              *  [pair>int:int] : min:max
              *  [     int    ] : index in the _queues
              */
-            std::vector<std::pair<std::pair<int, int>, int> > _queueRoutes;
+            std::vector<std::pair<std::pair<int, int>, u_int> > _queueRoutes;
             std::vector<LockFreeQueue<QueueContainer<T>, SIZE_QUEUES> > _queues;
         };
 

@@ -32,8 +32,6 @@ void readLockFreeQueue() {
         if (container) {
             std::cout<< "poped data n." << ++data << " value " << container->getContained() << std::endl;
         }
-        else
-            std::cout<< "empty ";
     }
 }
 

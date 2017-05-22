@@ -7,6 +7,8 @@
 
 #include <array>
 #include <iostream>
+#include <mutex>
+#include <condition_variable>
 #include "QueueContainer.hh"
 
 namespace fys {
@@ -17,11 +19,12 @@ namespace fys {
 
         public:
             ~LockFreeQueue() {}
-            LockFreeQueue() : _tail(0), _maxReadTail(0), _head(0) {}
+            LockFreeQueue() : _tail(0), _maxReadTail(0), _head(0), _isLocked(true) {}
             LockFreeQueue(const LockFreeQueue& other) {
                 this->_tail = 0;
                 this->_head = 0;
                 this->_maxReadTail = 0;
+                this->_isLocked = true;
             }
 
             TypeContainer *pop() {
@@ -30,6 +33,7 @@ namespace fys {
 
                 if (currentHead < currentReadTail)
                     return &_queue[_head++];
+                lockCondVar();
                 return NULL;
             }
 
@@ -42,8 +46,18 @@ namespace fys {
                 do {
                     tstValue = currentTail;
                 } while (!_maxReadTail.compare_exchange_weak(tstValue, currentTail + 1));
-
+                if (_isLocked) {
+                    _isLocked = false;
+                    _cv.notify_all();
+                }
             }
+
+            void lockCondVar() {
+                std::unique_lock<std::mutex> lck(_mutex);
+                _isLocked = true;
+                _cv.wait(lck, [&]{return !_isLocked;});
+            }
+
 
         private:
             inline u_int getIndex(const u_int index) const {
@@ -54,6 +68,10 @@ namespace fys {
             std::atomic_uint _tail;
             std::atomic_uint _maxReadTail;
             u_int            _head;
+            bool             _isLocked;
+
+            std::mutex _mutex;
+            std::condition_variable _cv;
 
             std::array<TypeContainer, SizeLFQ> _queue;
         };

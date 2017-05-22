@@ -1,2 +1,6 @@
 # FreeYourSoul_MQ
-MQ
+##FreeyourSoul LockFreeMQ 
+
+**MPOC : MultiProducer, OneConsumer**
+
+Use only atomic indexes (to produce elements)
