@@ -48,7 +48,7 @@ namespace fys {
                 }
             }
 
-            const QueueContainer<T> &popFromBus(const int routingKey) {
+            const QueueContainer<T> *popFromBus(const int routingKey) {
                 for (u_int i = 0; i < _queueRoutes.size(); ++i) {
                     if (routingKey >= _queueRoutes.at(i).first.first && routingKey <= _queueRoutes.at(i).first.second)
                         return _queues.at(_queueRoutes.at(i).second).pop();
