@@ -26,7 +26,7 @@ namespace fys {
                 this->_routingKey = routingKey;
             }
 
-            const u_int8_t getRoutingKey() const {
+            u_int8_t getRoutingKey() const {
                 return _routingKey;
             }
 
