@@ -30,7 +30,7 @@ void readLockFreeQueue() {
 
         container = lockFreeQueue.pop();
         if (container) {
-            std::cout<< "poped data n." << ++data << " value " << container->getContained() << std::endl;
+            std::cout<< "popped data n." << ++data << " value " << container->getContained() << std::endl;
         }
     }
 }

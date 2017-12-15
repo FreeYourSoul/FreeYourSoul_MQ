@@ -7,6 +7,8 @@
 
 #include <atomic>
 #include <sys/param.h>
+#include <string>
+#include <ostream>
 
 namespace fys {
     namespace mq {
@@ -14,36 +16,62 @@ namespace fys {
         /**
          * Container for a type for the LockFreeQueue @class fys::mq::LockFreeQueue
          */
-        template <typename Type>
+        template <class Type>
         class QueueContainer {
         public:
-            ~QueueContainer() {}
-            QueueContainer() : _routingKey(0) {}
+            ~QueueContainer() = default;
+            QueueContainer() : _opCodeMsg(0) {}
 
-            QueueContainer(const Type &container) : _routingKey(0), _contained(container) {}
+            QueueContainer(const Type &container) : _opCodeMsg(0), _contained(container) {}
 
-            void setRoutingKey(const u_int8_t routingKey) {
-                this->_routingKey = routingKey;
+            friend std::ostream &operator<<(std::ostream &os, const QueueContainer &container) {
+                os << "_opCodeMsg: " << container._opCodeMsg << " _tokenUser: " << container._indexSession << std::endl;
+                return os;
             }
 
-            u_int8_t getRoutingKey() const {
-                return _routingKey;
+            void setOpCodeMsg(const unsigned short opCodeMsg) {
+                this->_opCodeMsg = opCodeMsg;
             }
 
-            const Type getContained() const {
+            unsigned short getOpCodeMsg() const {
+                return _opCodeMsg;
+            }
+
+            Type &getContained() {
                 return _contained;
+            }
+
+            const Type &getContained() const {
+                return _contained;
+            }
+
+            uint getIndexSession() const {
+                return _indexSession;
+            }
+
+            void setIndexSession(const uint indexSession) {
+                this->_indexSession = indexSession;
+            }
+
+            void setContained(const Type &contained) {
+                this->_contained = contained;
             }
 
         private:
             /**
-             * Routing key for the {@class fys::mq::Bus}
+             * OpCode of the message for the {@class fys::mq::Bus} to redirect it to the correct queue
              */
-            u_int8_t   _routingKey;
+            unsigned short _opCodeMsg;
+
+            /**
+             * index position of the session (information used to get back the connection for the answer)
+             */
+            uint _indexSession;
 
             /**
              * Payload data to transfer via the queue
              */
-            Type       _contained;
+            Type _contained;
         };
 
     }

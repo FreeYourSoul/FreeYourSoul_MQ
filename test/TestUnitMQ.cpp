@@ -7,6 +7,7 @@
 
 #include <boost/test/unit_test.hpp>
 #include <boost/thread.hpp>
+#include <experimental/optional>
 #include "FysBusTest.hh"
 
 /**
@@ -14,24 +15,23 @@
  *  Bus Initialisation test------------------------------
  * ------------------------------------------------------
  */
-
 BOOST_AUTO_TEST_CASE( test_bus_ini )
 {
-    fys::mq::test::FysBusTest<std::string, 100> bus("/home/FyS/ClionProjects/FreeYourSoul_Server/FySMQ/resource/test_bus_inifile.ini");
+    fys::mq::test::FysBusTest<std::string, 100> bus(2);
     bus.validateBusConfiguration(2);
 }
 
-BOOST_AUTO_TEST_CASE_EXPECTED_FAILURES( test_bus_ini_error1, 2 )
+BOOST_AUTO_TEST_CASE_EXPECTED_FAILURES( test_bus_ini_error1, 1 )
 BOOST_AUTO_TEST_CASE( test_bus_ini_error1 )
 {
-    fys::mq::test::FysBusTest<std::string, 100> bus("/home/FyS/ClionProjects/FreeYourSoul_Server/FySMQ/resource/test_bus_inifile_error1.ini");
+    fys::mq::test::FysBusTest<std::string, 100> bus(1);
     bus.validateBusConfiguration(2);
 }
 
-BOOST_AUTO_TEST_CASE_EXPECTED_FAILURES( test_bus_ini_error2, 2 )
+BOOST_AUTO_TEST_CASE_EXPECTED_FAILURES( test_bus_ini_error2, 1 )
 BOOST_AUTO_TEST_CASE( test_bus_ini_error2 )
 {
-    fys::mq::test::FysBusTest<std::string, 100> bus("/home/FyS/ClionProjects/FreeYourSoul_Server/FySMQ/resource/test_bus_inifile_error2e.ini");
+    fys::mq::test::FysBusTest<std::string, 100> bus(2);
     bus.validateBusConfiguration(3);
 }
 
@@ -52,11 +52,8 @@ void addinlockfreequeue(const fys::mq::QueueContainer<std::string> &container) {
 
 void readLockFreeQueue() {
     for (int i = 0; i < 5000; ++i) {
-        fys::mq::QueueContainer<std::string> *container;
-
-        container = lockFreeQueue->pop();
         usleep(100);
-        if (container != NULL) {
+        if (static_cast<bool> (lockFreeQueue->pop())) {
             ++readValues;
         }
     }
@@ -80,7 +77,7 @@ BOOST_AUTO_TEST_CASE( test_queue_exec ) {
     fys::mq::QueueContainer<std::string> c2("B");
     fys::mq::QueueContainer<std::string> c3("C");
 
-    std::cout << "begin test exec" << std::endl;
+    std::cout << "begin Protobuff exec" << std::endl;
     c1.setOpCodeMsg(42);
     c2.setOpCodeMsg(43);
     c3.setOpCodeMsg(44);
@@ -95,6 +92,6 @@ BOOST_AUTO_TEST_CASE( test_queue_exec ) {
     w3.join();
     workerRead.join();
     cleanTestExecution();
-    std::cout << "end test exec : readValue = " << readValues << std::endl;
+    std::cout << "end Protobuff exec : readValue = " << readValues << std::endl;
     BOOST_CHECK(readValues == 4500);
 }
