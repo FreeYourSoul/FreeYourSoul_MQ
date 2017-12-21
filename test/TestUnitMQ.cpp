@@ -15,6 +15,7 @@
  *  Bus Initialisation test------------------------------
  * ------------------------------------------------------
  */
+
 BOOST_AUTO_TEST_CASE( test_bus_ini )
 {
     fys::mq::test::FysBusTest<std::string, 100> bus(2);
@@ -46,14 +47,15 @@ int readValues;
 void addinlockfreequeue(const fys::mq::QueueContainer<std::string> &container) {
 
     for (int i = 0; i < 1500; ++i) {
-        lockFreeQueue->push(container);
+        fys::mq::QueueContainer<std::string> tmp = container;
+        lockFreeQueue->push(std::move(tmp));
     }
 }
 
 void readLockFreeQueue() {
     for (int i = 0; i < 5000; ++i) {
         usleep(100);
-        if (static_cast<bool> (lockFreeQueue->pop())) {
+        if (lockFreeQueue->pop()) {
             ++readValues;
         }
     }
@@ -83,9 +85,9 @@ BOOST_AUTO_TEST_CASE( test_queue_exec ) {
     c3.setOpCodeMsg(44);
     initTestExecution();
     boost::thread workerRead(readLockFreeQueue);
-    boost::thread w1(boost::bind(addinlockfreequeue, c1));
-    boost::thread w2(boost::bind(addinlockfreequeue, c2));
-    boost::thread w3(boost::bind(addinlockfreequeue, c3));
+    boost::thread w1([this, &c1]() { addinlockfreequeue(c1); });
+    boost::thread w2([this, &c2]() { addinlockfreequeue(c2); });
+    boost::thread w3([this, &c3]() { addinlockfreequeue(c3); });
 
     w1.join();
     w2.join();
