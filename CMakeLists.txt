@@ -8,7 +8,7 @@ set(CMAKE_CXX_COMPILER /usr/bin/g++)
 include_directories(include include/bus include/queue)
 
 set(SOURCE_FILES main.cpp ${SOURCE_FILES_MQ})
-set(SOURCE_FILES_MQ src/bus/FysBus.cpp include/bus/FysBus.hh include/queue/LockFreeQueue.hh include/queue/QueueContainer.hh include/queue/LockingQueue.hh)
+set(SOURCE_FILES_MQ include/bus/FysBus.hh include/queue/LockFreeQueue.hh include/queue/QueueContainer.hh include/queue/LockingQueue.hh)
 set(SOURCE_FILES_TEST ${SOURCE_FILES_MQ} test/FySBusTestCase.cpp)
 
 ### Exexutable of test ###

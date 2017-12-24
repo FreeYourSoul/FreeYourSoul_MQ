@@ -17,19 +17,19 @@
 
 BOOST_AUTO_TEST_CASE( test_bus_ini )
 {
-    fys::mq::FysBus<std::string, 100> bus("/home/FyS/ClionProjects/FySMQ/docs/test_bus_inifile.ini");
+    fys::mq::FysBus<std::string, 100> bus(2);
 }
 
 BOOST_AUTO_TEST_CASE_EXPECTED_FAILURES( test_bus_ini_error1, 1 )
 BOOST_AUTO_TEST_CASE( test_bus_ini_error1 )
 {
-    fys::mq::FysBus<std::string, 100> bus("/home/FyS/ClionProjects/FreeYourSoul_MQ/docs/test_bus_inifile_error1.ini");
+    fys::mq::FysBus<std::string, 100> bus(2);
 }
 
 BOOST_AUTO_TEST_CASE_EXPECTED_FAILURES( test_bus_ini_error2, 1 )
 BOOST_AUTO_TEST_CASE( test_bus_ini_error2 )
 {
-    fys::mq::FysBus<std::string, 100> bus("/home/FyS/ClionProjects/FySMQ/docs/test_bus_inifile_error2.ini");
+    fys::mq::FysBus<std::string, 100> bus(2);
 }
 
 /**
@@ -40,20 +40,20 @@ BOOST_AUTO_TEST_CASE( test_bus_ini_error2 )
 fys::mq::LockFreeQueue<fys::mq::QueueContainer<std::string>, 5000> *lockFreeQueue;
 int readValues;
 
-void addinlockfreequeue(const fys::mq::QueueContainer<std::string> &container) {
+void addinlockfreequeue(fys::mq::QueueContainer<std::string> &&container) {
 
     for (int i = 0; i < 1500; ++i) {
-        lockFreeQueue->push(container);
+        lockFreeQueue->push(std::move(container));
     }
 }
 
 void readLockFreeQueue() {
     for (int i = 0; i < 10000; ++i) {
-        fys::mq::QueueContainer<std::string> *container;
+        std::optional<fys::mq::QueueContainer<std::string>> container;
 
         container = lockFreeQueue->pop();
         usleep(100);
-        if (container != NULL) {
+        if (container) {
             ++readValues;
 //            std::cout << readValues << " | ";
         }
@@ -80,9 +80,9 @@ BOOST_AUTO_TEST_CASE( test_bus_exec ) {
     fys::mq::QueueContainer<std::string> c2("B");
     fys::mq::QueueContainer<std::string> c3("C");
     std::thread workerRead(readLockFreeQueue);
-    std::thread w1(addinlockfreequeue, c1);
-    std::thread w2(addinlockfreequeue, c2);
-    std::thread w3(addinlockfreequeue, c3);
+    std::thread w1(addinlockfreequeue, std::move(c1));
+    std::thread w2(addinlockfreequeue, std::move(c2));
+    std::thread w3(addinlockfreequeue, std::move(c3));
 
     sleep(2);
     w1.join();
