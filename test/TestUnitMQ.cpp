@@ -79,7 +79,7 @@ BOOST_AUTO_TEST_CASE( test_queue_exec ) {
     fys::mq::QueueContainer<std::string> c2("B");
     fys::mq::QueueContainer<std::string> c3("C");
 
-    std::cout << "begin Protobuff exec" << std::endl;
+    std::cout << "begin Protobuf exec" << std::endl;
     c1.setOpCodeMsg(42);
     c2.setOpCodeMsg(43);
     c3.setOpCodeMsg(44);
@@ -94,6 +94,6 @@ BOOST_AUTO_TEST_CASE( test_queue_exec ) {
     w3.join();
     workerRead.join();
     cleanTestExecution();
-    std::cout << "end Protobuff exec : readValue = " << readValues << std::endl;
+    std::cout << "end Protobuf exec : readValue = " << readValues << std::endl;
     BOOST_CHECK(readValues == 4500);
 }
