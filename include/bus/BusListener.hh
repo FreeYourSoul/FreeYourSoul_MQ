@@ -23,7 +23,9 @@ namespace fys::mq {
 
     public:
         ~BusListener() = default;
-        explicit BusListener(Functor func) : _indexInBus(Functor::IndexInBus), _functor(func) {}
+        explicit BusListener(Functor func) : _indexInBus(Functor::IndexInBus), _functor(func) {
+            static_assert(Functor::IndexInBus >= 0);
+        }
 
         void launchListenThread(typename BusType::ptr bus, const bool launchTread = true) {
             if (launchTread) {
