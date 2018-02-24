@@ -1,5 +1,4 @@
 cmake_minimum_required(VERSION 3.3)
-project(FreeSouls CXX)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -lboost_timer -lboost_system -lboost_thread -pthread -Wall -Wpedantic -Wextra ")
 
@@ -12,7 +11,7 @@ set(SOURCE_FILES_MQ include/bus/FysBus.hh include/queue/LockFreeQueue.hh include
 set(SOURCE_FILES_TEST ${SOURCE_FILES_MQ} test/FySBusTestCase.cpp)
 
 ### Exexutable of test ###
-add_executable(FreeSouls ${SOURCE_FILES})
+#add_executable(MQ ${SOURCE_FILES})
 
 ### Linked Library compiled ###
 #add_library( )
@@ -22,5 +21,7 @@ add_definitions(-DBOOST_ALL_DYN_LINK)
 find_package(Boost COMPONENTS unit_test_framework REQUIRED)
 
 ## Test executable
-add_executable(UnitTests ${SOURCE_FILES_TEST})
-target_link_libraries(UnitTests ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
+add_executable(mqTest ${SOURCE_FILES_TEST})
+target_link_libraries(mqTest ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
+set_target_properties(mqTest PROPERTIES LINKER_LANGUAGE CXX)
+add_test(mqTest mqTest)
