@@ -8,7 +8,7 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/thread.hpp>
 #include <experimental/optional>
-#include "FysBusTest.hh"
+#include "FysBusTest.hpp"
 
 /**
  * ------------------------------------------------------
