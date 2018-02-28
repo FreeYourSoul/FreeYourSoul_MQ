@@ -44,17 +44,11 @@ namespace fys::mq {
         using ptr = std::shared_ptr<FysBus<T, SIZE_QUEUES> >;
         using wptr = std::weak_ptr<FysBus<T, SIZE_QUEUES> >;
 
-//            virtual ~FysBus() { // TODO delete correctly the _queues
-//                int toDelete = -1;
-//
-//                for (int i = 0; i < _queues.size(); ++i) {
-//                    if (toDelete == -1) {
-//                        delete(_queues.at(toDelete));
-//                        _queues.erase(toDelete);
-//                    }
-//                    toDelete = i;
-//                }
-//            }
+        ~FysBus() {
+            for (int i = 0; i < _queues.size(); ++i) {
+                delete(_queues.at(i));
+            }
+        }
 
         explicit FysBus(const int queueNumber) {
             for (int i = 0; i < queueNumber; ++i)
