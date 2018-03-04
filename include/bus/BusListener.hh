@@ -13,8 +13,8 @@
 namespace fys::mq {
 
     /**
-     * MsgType : Message type gotten from the queue listenned in the Bus
-     * Functor : Functor to execute for the message listenned
+     * MsgType : Message type gotten from the queue listened in the Bus
+     * Functor : Functor to execute for the message listened
      *           It has to implement its () function plus having a public IndexInBus enum hack
      *
      */
