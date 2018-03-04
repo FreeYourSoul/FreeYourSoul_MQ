@@ -5,10 +5,12 @@
 #ifndef FREESOULS_BUSLISTENER_HH
 #define FREESOULS_BUSLISTENER_HH
 
+#include <spdlog/spdlog.h>
 #include <zconf.h>
 #include <boost/bind.hpp>
 #include <boost/thread.hpp>
 #include <QueueContainer.hh>
+
 
 namespace fys::mq {
 
@@ -44,7 +46,7 @@ namespace fys::mq {
                 std::cerr << "Listener couldn't be launched; the index (" << _indexInBus << ") in bus is not legitimate" << std::endl;
                 return;
             }
-            std::cout << "Listener launched, listen on queue: " << _indexInBus << " for functor: " << typeid(_functor).name() << std::endl;
+            spdlog::get("c")->debug("Listener launched, listen on queue: {} for functor: {}", _indexInBus, typeid(_functor).name());
             while (true) {
                 auto msgContainer = bus->popFromBus(_indexInBus);
                 if (static_cast<bool>(msgContainer))
