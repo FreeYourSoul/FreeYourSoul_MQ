@@ -43,10 +43,10 @@ namespace fys::mq {
     private:
         void listen(typename BusType::ptr bus) {
             if (!bus->isIndexQueueLegitimate(_indexInBus)) {
-                std::cerr << "Listener couldn't be launched; the index (" << _indexInBus << ") in bus is not legitimate" << std::endl;
+                spdlog::get("c")->error("Listener couldn't be launched; the index ({}) in bus is not legitimate", _indexInBus);
                 return;
             }
-            spdlog::get("c")->debug("Listener launched, listen on queue: {} for functor: {}", _indexInBus, typeid(_functor).name());
+            spdlog::get("c")->info("Listener launched, listen on queue: {} for functor: {}", _indexInBus, typeid(_functor).name());
             while (true) {
                 auto msgContainer = bus->popFromBus(_indexInBus);
                 if (static_cast<bool>(msgContainer))
