@@ -45,6 +45,7 @@ namespace fys::mq {
         using wptr = std::weak_ptr<FysBus<T, SIZE_QUEUES> >;
 
         ~FysBus() {
+            std::cout << "mmmhhhhhhhhhhhhdehdeudeded" << std::endl;
             for (int i = 0; i < _queues.size(); ++i) {
                 delete(_queues.at(i));
             }
