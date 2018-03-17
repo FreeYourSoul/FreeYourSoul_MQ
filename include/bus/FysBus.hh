@@ -13,13 +13,6 @@
 #include <LockFreeQueue.hh>
 #include <QueueContainer.hh>
 
-#define INIT_BUS_NB_QUEUE "bus.number_queue"
-#define INIT_BUS_NAME "bus.name"
-#define BUS_QUEUE(n) std::string("queue") + n
-#define QUEUE_NAME(n) BUS_QUEUE(n) + ".name"
-#define QUEUE_MIN(n) BUS_QUEUE(n) + ".min"
-#define QUEUE_MAX(n) BUS_QUEUE(n) + ".max"
-
 namespace fys::mq {
 
     /**
