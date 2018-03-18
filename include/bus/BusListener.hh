@@ -13,10 +13,11 @@
 namespace fys::mq {
 
     /**
-     * MsgType : Message type gotten from the queue listened in the Bus
-     * Functor : Functor to execute for the message listened
-     *           It has to implement its () function plus having a public IndexInBus enum hack
-     *
+     * \brief This class
+     * \tparam BusType bus specification
+     * \tparam Functor actual listener implementation that contains the operator() overload in order to route messages
+     *         Functor to execute for the message listened
+     *         It has to implement its () function plus having a public IndexInBus enum hack
      */
     template <typename Functor, typename BusType>
     class BusListener {

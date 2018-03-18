@@ -9,6 +9,7 @@
 #include <sys/param.h>
 #include <string>
 #include <ostream>
+#include <utility>
 
 namespace fys::mq {
 
@@ -20,6 +21,11 @@ namespace fys::mq {
     public:
         QueueContainer() : _opCodeMsg(0), _indexSession(0) {}
         explicit QueueContainer(const Type &container) : _opCodeMsg(0), _indexSession(0), _contained(container) {
+        }
+        QueueContainer(QueueContainer &other) {
+            this->_opCodeMsg = other._opCodeMsg;
+            this->_indexSession = other._indexSession;
+            std::swap(this->_contained, other._contained);
         }
 
         friend std::ostream &operator<<(std::ostream &os, const QueueContainer &container) {
