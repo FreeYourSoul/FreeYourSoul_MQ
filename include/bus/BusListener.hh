@@ -7,10 +7,8 @@
 
 #include <spdlog/spdlog.h>
 #include <zconf.h>
-#include <boost/bind.hpp>
-#include <boost/thread.hpp>
+#include <thread>
 #include <QueueContainer.hh>
-
 
 namespace fys::mq {
 
@@ -31,7 +29,7 @@ namespace fys::mq {
 
         void launchListenThread(typename BusType::ptr bus, const bool launchTread = true) {
             if (launchTread) {
-                boost::thread thread([this, &bus]() {
+                std::thread thread([this, &bus]() {
                     this->listen(bus);
                 });
                 thread.detach();
