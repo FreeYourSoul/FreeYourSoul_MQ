@@ -28,7 +28,7 @@ namespace fys::mq {
             static_assert(Functor::IndexInBus >= 0);
         }
 
-        void launchListenThread(typename BusType::ptr bus, const bool launchTread) {
+        void launchListenThread(typename BusType::ptr bus, const bool launchTread = true) {
             if (launchTread) {
                 std::thread thread([this, &bus]() {
                     this->listen(bus);
