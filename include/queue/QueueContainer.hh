@@ -53,7 +53,7 @@ namespace fys::mq {
             return _indexSession;
         }
 
-        void setIndexSession(const uint indexSession) {
+        void setIndexSession(uint indexSession) {
             this->_indexSession = indexSession;
         }
 
