@@ -28,15 +28,18 @@ namespace fys::mq {
             static_assert(Functor::IndexInBus >= 0);
         }
 
-        void launchListenThread(typename BusType::ptr bus, const bool launchTread = true) {
+        void launchListenThread(typename BusType::ptr bus, const bool launchTread) {
             if (launchTread) {
                 std::thread thread([this, &bus]() {
                     this->listen(bus);
                 });
                 thread.detach();
             }
-            else
+            else {
+                {
                 listen(bus);
+                }
+            }
         }
 
     private:

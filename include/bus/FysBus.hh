@@ -38,12 +38,12 @@ namespace fys::mq {
         using wptr = std::weak_ptr<FysBus<T, SIZE_QUEUES> >;
 
         ~FysBus() {
-            for (int i = 0; i < _queues.size(); ++i) {
+            for (unsigned i = 0; i < _queues.size(); ++i) {
                 delete(_queues.at(i));
             }
         }
 
-        explicit FysBus(const int queueNumber) {
+        explicit FysBus(int queueNumber) {
             for (int i = 0; i < queueNumber; ++i)
                 _queues.push_back(new LockFreeQueue<QueueContainer<T>, SIZE_QUEUES>());
         }
@@ -52,14 +52,14 @@ namespace fys::mq {
             _queues.at(message.getOpCodeMsg())->push(std::forward<QueueContainer<T> >(message));
         }
 
-        std::optional<QueueContainer<T> > popFromBus(const int indexQueueInBus) {
+        std::optional<QueueContainer<T> > popFromBus(unsigned int indexQueueInBus) {
             if (isIndexQueueLegitimate(indexQueueInBus)) {
                 return _queues.at(indexQueueInBus)->pop();
             }
             return std::optional<QueueContainer<T> > {};
         }
 
-        inline bool isIndexQueueLegitimate(const int indexQueueInBus) {
+        inline bool isIndexQueueLegitimate(unsigned int indexQueueInBus) {
             return indexQueueInBus < _queues.size();
         }
 
