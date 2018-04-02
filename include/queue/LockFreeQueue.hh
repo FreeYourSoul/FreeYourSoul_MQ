@@ -14,6 +14,15 @@
 
 namespace fys::mq {
 
+    /**
+     * \brief Lock Free Queue used for FySBus MPOC (Multi producer, one consumer)
+     * \note *******************<br/>
+     *  LIFO queue, head is managed not thread safely and is where the queue is read (consumed)
+     *  tail is managed using atomics and is where the queue is filled (producers)
+     *
+     * \tparam TypeContainer
+     * \tparam SizeLFQ
+     */
     template <class TypeContainer, int SizeLFQ>
     class LockFreeQueue {
 
@@ -47,14 +56,6 @@ namespace fys::mq {
             }
         }
 
-        void lockCondVar() {
-            if (_isLockingWhenEmpty) {
-                std::unique_lock<std::mutex> lck(_mutex);
-                _isLocked = true;
-                _cv.wait(lck, [&]{return !_isLocked;});
-            }
-        }
-
         void setLockingWhenEmpty(const bool _isLockingWhenEmpty) {
             LockFreeQueue::_isLockingWhenEmpty = _isLockingWhenEmpty;
         }
@@ -66,6 +67,14 @@ namespace fys::mq {
     private:
         inline u_int getIndex(const u_int index) const {
             return index % SizeLFQ;
+        }
+
+        void lockCondVar() {
+            if (_isLockingWhenEmpty) {
+                std::unique_lock<std::mutex> lck(_mutex);
+                _isLocked = true;
+                _cv.wait(lck, [&]{return !_isLocked;});
+            }
         }
 
     private:

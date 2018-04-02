@@ -14,7 +14,9 @@
 namespace fys::mq {
 
     /**
-     * Container for a type for the LockFreeQueue @class fys::mq::LockFreeQueue
+     * Container for a type for the LockFreeQueue in order to be used a generic in Bus
+     * @class fys::mq::LockFreeQueue
+     *        fys::mq::FySBus
      */
     template <class Type>
     class QueueContainer {
