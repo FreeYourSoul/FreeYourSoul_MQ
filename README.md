@@ -1,5 +1,4 @@
 # FreeYourSoul_MQ
-##FreeyourSoul LockFreeMQ 
 
 FySMQ is a header only toolset (bus+MQ) used by the FreeYourSoul project.
 
