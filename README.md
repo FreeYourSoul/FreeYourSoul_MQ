@@ -16,7 +16,9 @@ The QueueContainer contains an element called ``_opCodeMessage`` that is redirec
 **Listener**
 
 A template class called  
-``fys::mq::BusListener <ListenerClass, FySBus < TypeMessageClass, FixedSizeOfEachQueueInBus>>``   
+```cpp
+fys::mq::BusListener< ListenerClass, FySBus< TypeMessageClass, FixedSizeOfEachQueueInBus>>
+```   
 is used to listen to a bus queue, the ListenerClass template has to contains a public anonymous enum (enum hack) with an element called IndexInBus that is going to have the value of the index of the queue to listen to on the bus.
 
 _usage_ :  Create a queue of a generic type 
