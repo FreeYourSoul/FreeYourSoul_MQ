@@ -21,7 +21,7 @@ is used to listen to a bus queue, the ListenerClass template has to contains a p
 
 _usage_ :  Create a queue of a generic type 
 
-````
+```cpp
 class MyListenerClass {
     public:
         enum { IndexInBus = 0 }; // Index of the queue in the bus to listen to is 0
@@ -40,4 +40,4 @@ int main(int argc, const char * const *argv) {
     listener.launchListenThread(bus); 
 }
  
-````
+```
