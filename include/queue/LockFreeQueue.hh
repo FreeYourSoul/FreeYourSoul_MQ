@@ -16,7 +16,7 @@ namespace fys::mq {
 
     /**
      * \brief Lock Free Queue used for FySBus MPOC (Multi producer, one consumer)
-     * \note *******************<br/>
+     * \details *******************<br/>
      *  LIFO queue, head is managed not thread safely and is where the queue is read (consumed)
      *  tail is managed using atomics and is where the queue is filled (producers)
      *
