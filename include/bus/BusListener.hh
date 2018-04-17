@@ -24,8 +24,10 @@ namespace fys::mq {
 
     public:
         ~BusListener() = default;
+
         explicit BusListener(Functor func) : _indexInBus(Functor::IndexInBus), _functor(func) {
-            static_assert(Functor::IndexInBus >= 0);
+            static_assert(Functor::IndexInBus >= 0 && Functor::IndexInBus < 2,
+                          "Functor doesn't have a correct inner enum to select a queue in bus");
         }
 
         void launchListenThread(typename BusType::ptr bus, const bool launchTread = true) {
@@ -36,9 +38,7 @@ namespace fys::mq {
                 thread.detach();
             }
             else {
-                {
                 listen(bus);
-                }
             }
         }
 
