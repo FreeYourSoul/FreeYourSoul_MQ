@@ -30,7 +30,7 @@ namespace fys::mq {
 
         void launchListenThread(typename BusType::ptr bus, const bool launchTread = true) {
             if (launchTread) {
-                std::thread thread([this, &bus]() {
+                std::thread thread([this, bus]() {
                     this->listen(bus);
                 });
                 thread.detach();

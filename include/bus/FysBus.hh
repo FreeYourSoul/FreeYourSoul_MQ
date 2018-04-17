@@ -45,7 +45,7 @@ namespace fys::mq {
 
         explicit FysBus(int queueNumber) {
             for (int i = 0; i < queueNumber; ++i)
-                _queues.push_back(new LockFreeQueue<QueueContainer<T>, SIZE_QUEUES>());
+                _queues.emplace_back(new LockFreeQueue<QueueContainer<T>, SIZE_QUEUES>());
         }
 
         void pushInBus(QueueContainer<T> &&message) {
