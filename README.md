@@ -1,6 +1,6 @@
 # FreeYourSoul_MQ
 
-FySMQ is a header only toolset (bus+MQ) used by the FreeYourSoul project.
+FySMQ is a header only toolset (bus+MQ) used by the deprecated version of FreeYourSoul project.
 
 **Lock-Free queue MPOC (MultiProducer, OneConsumer)**
 
